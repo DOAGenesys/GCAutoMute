@@ -16,17 +16,14 @@ async function start() {
         const config = await getConfig();
         await startGCSDKs(config.GCclientId);
         console.log("Auto-mute: retrieved clientId in start: ", config.GCclientId);
-        getParticipantIds();
-
-        // Make the body visible after initialization is complete
-        document.getElementById('body').style.display = 'block';
+        getConversationAndCheckDDI(config.DDIlist);
     } catch (error) {
         console.error('Auto-mute: Error occurred while starting:', error);
     }
 }
 
-function getParticipantIds() {
-    console.log("Auto-mute: getParticipantIds started");
+function getConversationAndCheckDDI(DDIlist) {
+    console.log("Auto-mute: getConversationAndCheckDDI started");
     let apiInstance = new platformClient.ConversationsApi();
 
     apiInstance.getConversation(window.conversationId)
@@ -34,15 +31,25 @@ function getParticipantIds() {
             console.log("Auto-mute: Conversation data:", data);
             let participants = data.participants;
             console.log("Auto-mute: Participants:", participants);
-            for (let i = 0; i < participants.length; i++) {
-                if (participants[i].purpose === 'agent') {
-                    agentParticipantId = participants[i].id;
+            let customerDNIS;
+            let agentParticipantId;
+            for (let participant of participants) {
+                if (participant.purpose === 'customer') {
+                    customerDNIS = participant.dnis;
+                    console.log("Auto-mute: Customer DNIS:", customerDNIS);
+                } else if (participant.purpose === 'agent') {
+                    agentParticipantId = participant.id;
                     console.log("Auto-mute: Setting agentParticipantId:", agentParticipantId);
-                    muteAgent(agentParticipantId); // Call the muteAgent function when agentParticipantId is known
-                } else if (participants[i].purpose === 'customer') {
-                    customerParticipantId = participants[i].id;
-                    console.log("Auto-mute: Setting customerParticipantId:", customerParticipantId);
                 }
+            }
+            // Convert DDIlist from string to array and trim spaces
+            let DDIarray = DDIlist.split(';').map(DDI => DDI.trim());
+            // Check if DNIS is within DDIlist and if there's an agentParticipantId to mute
+            if (DDIarray.includes(customerDNIS) && agentParticipantId) {
+                console.log("Auto-mute: DNIS found in DDIlist, muting call.");
+                muteAgent(agentParticipantId); // Mute the agent if DNIS is in DDIlist
+            } else {
+                console.log("Auto-mute: DNIS not found in DDIlist or no agent found, not muting.");
             }
         })
         .catch((err) => {
