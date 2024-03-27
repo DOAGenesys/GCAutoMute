@@ -63,7 +63,6 @@ function muteAgent(agentParticipantId) {
     let participantId = agentParticipantId; 
     let body = {"muted": true}; 
 
-    // Update conversation participant
     apiInstance.patchConversationsCallParticipant(conversationId, participantId, body)
         .then(() => {
             console.log("Auto-mute: patchConversationsCallParticipant returned successfully.");
