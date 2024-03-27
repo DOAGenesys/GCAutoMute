@@ -14,13 +14,14 @@ function getConfig() {
 async function start() {
     try {
         const config = await getConfig();
-        startGCSDKs(config.GCclientId);
+        await startGCSDKs(config.GCclientId);
         console.log("Auto-mute: retrieved clientId in start: ", config.GCclientId);
         getParticipantIds();
     } catch (error) {
         console.error('Auto-mute: Error occurred while starting:', error);
     }
 }
+
 
 function getParticipantIds() {
     console.log("Auto-mute: getParticipantIds started");
