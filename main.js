@@ -66,8 +66,12 @@ function muteAgent(agentParticipantId) {
     apiInstance.patchConversationsCallParticipant(conversationId, participantId, body)
         .then(() => {
             console.log("Auto-mute: patchConversationsCallParticipant returned successfully.");
-            document.getElementById('statusMessage').style.display = 'block';
-            document.getElementById('statusMessage').innerText = 'Call muted'; 
+            // Ensure body is visible
+            document.getElementById('body').style.display = 'block'; // Add this line
+            // Ensure the status message is visible
+            const statusMessageElement = document.getElementById('statusMessage');
+            statusMessageElement.style.display = 'block';
+            statusMessageElement.innerText = 'Call muted'; 
         })
         .catch((err) => {
             console.log("Auto-mute: There was a failure calling patchConversationsCallParticipant:");
