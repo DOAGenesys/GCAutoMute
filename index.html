@@ -9,21 +9,9 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body id="body" style="display: none;">
-    <div id="transferTypeSelection">
-        <button id="blindTransferButton" onclick="startBlindTransfer()">Blind Transfer</button>
-        <button id="consultTransferButton" onclick="startConsultTransfer()">Consult Transfer</button>
-    </div>
-    
-    <div id="blindTransferElements" style="display: none;">
-        <select id="queueSelectBlind"></select>
-        <button id="confirmBlindTransferButton" onclick="blindTransfer()">Confirm</button>
-    </div>
 
-    <div id="consultTransferElements" style="display: none;">
-        <select id="speakToSelect"></select>
-        <select id="queueSelectConsult"></select>
-        <!-- Removed the confirmConsultTransferButton here -->
-    </div>
+    <div id="statusMessage" class="status-message"></div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             start();
