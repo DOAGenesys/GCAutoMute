@@ -27,7 +27,7 @@ function startGCSDKs(clientId) {
             window.conversationId = conversationId;
             window.environment = environment;
 
-            console.log('Configuration assigned:', { language, environment, conversationId });
+            console.log('Auto-mute: Configuration assigned:', { language, environment, conversationId });
         }
 
         assignConfiguration();
@@ -50,11 +50,11 @@ function startGCSDKs(clientId) {
                 document.getElementById('span_language').innerText = language;
                 document.getElementById('span_name').innerText = userDetails.name;
 
-                console.log('SDKs initialization complete.');
+                console.log('Auto-mute: SDKs initialization complete.');
                 resolve(platformClient);
             })
             .catch((err) => {
-                console.error("Error during setup:", err);
+                console.error("Auto-mute: Error during setup:", err);
                 reject(err);
             });
     });
