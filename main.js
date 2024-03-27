@@ -16,14 +16,14 @@ async function start() {
         const config = await getConfig();
         await startGCSDKs(config.GCclientId);
         console.log("Auto-mute: retrieved clientId in start: ", config.GCclientId);
-        getConversationAndCheckDDI(config.DDIlist);
+        getConversationAndCheckDNIS(config.DDIlist);
     } catch (error) {
         console.error('Auto-mute: Error occurred while starting:', error);
     }
 }
 
-function getConversationAndCheckDDI(DDIlist) {
-    console.log("Auto-mute: getConversationAndCheckDDI started");
+function getConversationAndCheckDNIS(DDIlist) {
+    console.log("Auto-mute: getConversationAndCheckDNIS started");
     let apiInstance = new platformClient.ConversationsApi();
 
     apiInstance.getConversation(window.conversationId)
