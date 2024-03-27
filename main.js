@@ -17,11 +17,13 @@ async function start() {
         await startGCSDKs(config.GCclientId);
         console.log("Auto-mute: retrieved clientId in start: ", config.GCclientId);
         getParticipantIds();
+
+        // Make the body visible after initialization is complete
+        document.getElementById('body').style.display = 'block';
     } catch (error) {
         console.error('Auto-mute: Error occurred while starting:', error);
     }
 }
-
 
 function getParticipantIds() {
     console.log("Auto-mute: getParticipantIds started");
