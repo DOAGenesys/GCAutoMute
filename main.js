@@ -1,4 +1,3 @@
-// PureCloud Platform Client and API instances
 const platformClient = require('platformClient');
 const client = platformClient.ApiClient.instance;
 
