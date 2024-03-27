@@ -1,5 +1,7 @@
 function startGCSDKs(clientId) {
     return new Promise((resolve, reject) => {
+        console.log('Auto-mute: startGCSDKs function started.');
+
         // Configuration parameters
         const appName = 'Auto mute';
         const qParamLanguage = 'langTag';
@@ -7,7 +9,7 @@ function startGCSDKs(clientId) {
         const qParamConversationId = 'conversationId';
         const redirectUri = 'https://gc-auto-mute.vercel.app';
 
-        // Default configuration values
+        console.log('Auto-mute: Default configuration values being set.');
         let language = '';
         let environment = '';
         let userDetails = null;
@@ -15,6 +17,7 @@ function startGCSDKs(clientId) {
 
         // Assign configurations from URL parameters or localStorage
         function assignConfiguration() {
+            console.log('Auto-mute: Assigning configuration.');
             let browser_url = new URL(window.location);
             let searchParams = new URLSearchParams(browser_url.search);
             
@@ -30,9 +33,9 @@ function startGCSDKs(clientId) {
             console.log('Auto-mute: Configuration assigned:', { language, environment, conversationId });
         }
 
-        assignConfiguration();
+        assignConfiguration(); // Ensure configuration is assigned before proceeding
 
-        // Genesys Cloud SDK and Client App initialization
+        console.log('Auto-mute: Beginning Genesys Cloud SDK and Client App initialization.');
         const platformClient = require('platformClient');
         const client = platformClient.ApiClient.instance;
         const usersApi = new platformClient.UsersApi();
@@ -42,10 +45,16 @@ function startGCSDKs(clientId) {
         client.setPersistSettings(true, appName);
         client.setEnvironment(window.environment);
 
+        console.log('Auto-mute: Attempting to log in using implicit grant.');
         client.loginImplicitGrant(clientId, redirectUri)
-            .then(() => usersApi.getUsersMe())
+            .then(() => {
+                console.log('Auto-mute: Logged in successfully, attempting to fetch user details.');
+                return usersApi.getUsersMe();
+            })
             .then(data => {
                 userDetails = data;
+                console.log('Auto-mute: User details fetched successfully:', userDetails);
+
                 document.getElementById('span_environment').innerText = window.environment;
                 document.getElementById('span_language').innerText = language;
                 document.getElementById('span_name').innerText = userDetails.name;
