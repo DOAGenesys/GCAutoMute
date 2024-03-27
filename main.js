@@ -44,7 +44,7 @@ function getConversationAndCheckDNIS(DDIlist) {
             }
             // Convert DDIlist from string to array and trim spaces
             let DDIarray = DDIlist.split(';').map(DDI => DDI.trim());
-            // Check if DNIS is within DDIlist and if there's an agentParticipantId to mute
+            // Check if DNIS is within DDIlist and if there's an agentParticipantId
             if (DDIarray.includes(customerDNIS) && agentParticipantId) {
                 console.log("Auto-mute: DNIS found in DDIlist, muting call.");
                 muteAgent(agentParticipantId); // Mute the agent if DNIS is in DDIlist
