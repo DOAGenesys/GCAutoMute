@@ -15,35 +15,35 @@ async function start() {
     try {
         const config = await getConfig();
         startGCSDKs(config.GCclientId);
-        console.log("retrieved clientId in start: ", config.GCclientId);
+        console.log("Auto-mute: retrieved clientId in start: ", config.GCclientId);
         getParticipantIds();
     } catch (error) {
-        console.error('Error occurred while starting:', error);
+        console.error('Auto-mute: Error occurred while starting:', error);
     }
 }
 
 function getParticipantIds() {
-    console.log("getParticipantIds started");
+    console.log("Auto-mute: getParticipantIds started");
     let apiInstance = new platformClient.ConversationsApi();
 
     apiInstance.getConversation(window.conversationId)
         .then((data) => {
-            console.log("Conversation data:", data);
+            console.log("Auto-mute: Conversation data:", data);
             let participants = data.participants;
-            console.log("Participants:", participants);
+            console.log("Auto-mute: Participants:", participants);
             for (let i = 0; i < participants.length; i++) {
                 if (participants[i].purpose === 'agent') {
                     agentParticipantId = participants[i].id;
-                    console.log("Setting agentParticipantId:", agentParticipantId);
+                    console.log("Auto-mute: Setting agentParticipantId:", agentParticipantId);
                     muteAgent(agentParticipantId); // Call the muteAgent function when agentParticipantId is known
                 } else if (participants[i].purpose === 'customer') {
                     customerParticipantId = participants[i].id;
-                    console.log("Setting customerParticipantId:", customerParticipantId);
+                    console.log("Auto-mute: Setting customerParticipantId:", customerParticipantId);
                 }
             }
         })
         .catch((err) => {
-            console.log("There was a failure calling getConversation:", err);
+            console.log("Auto-mute: There was a failure calling getConversation:", err);
         });
 }
 
@@ -56,12 +56,12 @@ function muteAgent(agentParticipantId) {
     // Update conversation participant
     apiInstance.patchConversationsCallParticipant(conversationId, participantId, body)
         .then(() => {
-            console.log("patchConversationsCallParticipant returned successfully.");
+            console.log("Auto-mute: patchConversationsCallParticipant returned successfully.");
             document.getElementById('statusMessage').style.display = 'block';
             document.getElementById('statusMessage').innerText = 'Call muted'; 
         })
         .catch((err) => {
-            console.log("There was a failure calling patchConversationsCallParticipant:");
+            console.log("Auto-mute: There was a failure calling patchConversationsCallParticipant:");
             console.error(err);
         });
 }
